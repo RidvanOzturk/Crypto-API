@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import "./App.css";
+ 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [portfolio, setPortfolio] = useState([]);
+  useEffect(() => {
+    async function fetchExchangeRates() {
+      const assets = ['BTC', 'ETH', 'XRP'];
+      const promises = assets.map(asset => axios.get(`https://rest.coinapi.io/v1/exchangerate/${asset}/USD?apikey=B304A7E8-BAE8-4D9D-82A1-9CD965C95B8E`));
+      const responses = await Promise.all(promises);
+      const exchangeRates = responses.reduce((acc, response, index) => {
+        acc[assets[index]] = response.data.rate;
+        return acc;
+      }, {});
+      setPortfolio(exchangeRates);
+    }
+    fetchExchangeRates();
+  }, []);
+  
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+     <h1>CoinAPI Cryptocurrency Portfolio Tracker App</h1>
+     <ul>
+        {Object.entries(portfolio).map(([asset, exchangeRate]) => (
+          <li key={asset}>{asset}: {exchangeRate}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-
-export default App
+export default App;

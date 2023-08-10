@@ -1,9 +1,4 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+
 
 .logo {
   height: 6em;
@@ -39,4 +34,18 @@
 
 .read-the-docs {
   color: #888;
+}
+.App{
+  margin:auto;
+  width: 700px;
+  height: 250px;
+  background-color:#61dafbaa;
+  border-radius: 25px;
+}
+ul{
+  color:grey;
+  
+}
+h1{
+  text-align: center;
 }
